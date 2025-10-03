@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}Контакты - ООО "Системная безопасность"{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <h1>📞 Контакты</h1>
+        <p class="lead">Свяжитесь с нами для получения консультации или обсуждения вашего проекта</p>
+        
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <div class="h1 text-primary">📞</div>
+                        <h5 class="card-title">Телефон</h5>
+                        <p class="card-text">+7 (495) 123-45-67</p>
+                        <small class="text-muted">Пн-Пт: 9:00-18:00</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <div class="h1 text-success">✉️</div>
+                        <h5 class="card-title">Email</h5>
+                        <p class="card-text">info@sys-sec.ru</p>
+                        <small class="text-muted">Ответим в течение 24 часов</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title">🏢 Адрес офиса</h5>
+                <p class="card-text">123456, г. Москва, ул. Безопасности, д. 1<br>Бизнес-центр "Security Plaza", офис 501</p>
+                <small class="text-muted">🚇 Метро: Безопасная</small>
+            </div>
+        </div>
+        
+        <div class="mt-4">
+            <h4>Форма обратной связи</h4>
+            <form id="contact-form">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="name" class="form-label">Ваше имя *</label>
+                        <input type="text" class="form-control" id="name" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="email" class="form-label">Email *</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="company" class="form-label">Компания</label>
+                    <input type="text" class="form-control" id="company">
+                </div>
+                <div class="mb-3">
+                    <label for="subject" class="form-label">Тема обращения *</label>
+                    <select class="form-select" id="subject" required>
+                        <option value="">Выберите тему</option>
+                        <option value="consultation">Консультация по услугам</option>
+                        <option value="tender">Участие в тендере</option>
+                        <option value="partnership">Сотрудничество</option>
+                        <option value="support">Техническая поддержка</option>
+                        <option value="other">Другое</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="message" class="form-label">Сообщение *</label>
+                    <textarea class="form-control" id="message" rows="5" required placeholder="Опишите ваш вопрос или проект..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg">Отправить сообщение</button>
+            </form>
+            <div id="contact-message" class="mt-3"></div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">📄 Реквизиты компании</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>ООО "Системная безопасность"</strong></p>
+                <p><strong>ИНН:</strong> 5040190893<br>
+                <strong>КПП:</strong> 504001001<br>
+                <strong>ОГРН:</strong> 1245000057323</p>
+                <p><strong>Юридический адрес:</strong><br>
+                улица Гагарина, дом 2, пом. 7, Жуковский, МО Московская область, 140180</p>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">🛡️ Отдел безопасности</h5>
+            </div>
+            <div class="card-body">
+                <p>Для вопросов информационной безопасности:</p>
+                <p>📧 security@sys-sec.ru<br>
+                📞 +7 (495) 565 36 22</p>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header bg-warning text-white">
+                <h5 class="mb-0">🤝 Коммерческий отдел</h5>
+            </div>
+            <div class="card-body">
+                <p>Для обсуждения коммерческих предложений:</p>
+                <p>📧 sales@sys-sec.ru<br>
+                📞 +7 (495) 565 36 22</p>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-body text-center">
+                <h6>Мы в социальных сетях</h6>
+                <div class="btn-group w-100">
+                    <button class="btn btn-outline-primary">Telegram</button>
+                    <button class="btn btn-outline-dark">GitHub</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('contact-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const messageDiv = document.getElementById('contact-message');
+    messageDiv.innerHTML = `
+        <div class="alert alert-success">
+            <h5>Спасибо за ваше сообщение!</h5>
+            <p>Мы получили ваше обращение и свяжемся с вами в ближайшее время.</p>
+            <p><strong>Номер обращения:</strong> #${Math.random().toString(36).substr(2, 9).toUpperCase()}</p>
+        </div>
+    `;
+    
+    // Очищаем форму
+    document.getElementById('contact-form').reset();
+});
+</script>
+{% endblock %}

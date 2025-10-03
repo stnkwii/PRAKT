@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Страница не найдена - ООО "Системная безопасность"{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6 text-center">
+        <div class="card">
+            <div class="card-body py-5">
+                <div class="mb-4">
+                    <div class="text-muted" style="font-size: 6rem;">404</div>
+                </div>
+                <h2>Страница не найдена</h2>
+                <p class="lead">Запрашиваемая страница не существует или была перемещена.</p>
+                
+                <div class="mt-4">
+                    <a href="/" class="btn btn-primary me-2">🏠 На главную</a>
+                    <a href="/tenders" class="btn btn-outline-primary">📋 К тендерам</a>
+                </div>
+                
+                <div class="mt-4">
+                    <p class="text-muted">
+                        Если вы считаете, что это ошибка, свяжитесь с нашей поддержкой.
+                    </p>
+                    <a href="/contact" class="btn btn-outline-secondary btn-sm">📞 Связаться с поддержкой</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

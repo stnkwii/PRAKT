@@ -1,0 +1,232 @@
+/* Переменные для светлой темы */
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-tertiary: #e9ecef;
+    --text-primary: #212529;
+    --text-secondary: #6c757d;
+    --border-color: #dee2e6;
+    --primary-color: #0d6efd;
+    --success-color: #198754;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+/* Переменные для темной темы */
+[data-theme="dark"] {
+    --bg-primary: #1a1d23;
+    --bg-secondary: #2d3239;
+    --bg-tertiary: #3a3f47;
+    --text-primary: #f8f9fa;
+    --text-secondary: #adb5bd;
+    --border-color: #495057;
+    --primary-color: #3d8bff;
+    --success-color: #20c997;
+    --warning-color: #ffd43b;
+    --danger-color: #ff6b6b;
+    --shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
+}
+
+/* Базовые стили */
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+/* Навигация */
+.navbar {
+    background-color: var(--bg-secondary) !important;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.navbar-brand, .nav-link {
+    color: var(--text-primary) !important;
+}
+
+.nav-link:hover {
+    color: var(--primary-color) !important;
+}
+
+/* Карточки */
+.card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    box-shadow: var(--shadow);
+}
+
+.card-header {
+    background-color: var(--bg-tertiary);
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+/* Формы */
+.form-control {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.form-control:focus {
+    background-color: var(--bg-primary);
+    border-color: var(--primary-color);
+    color: var(--text-primary);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.form-label {
+    color: var(--text-primary);
+}
+
+/* Кнопки */
+.btn-outline-primary {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Таблицы */
+.table {
+    color: var(--text-primary);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: var(--bg-tertiary);
+}
+
+/* Хлебные крошки */
+.breadcrumb {
+    background-color: var(--bg-secondary);
+}
+
+.breadcrumb-item.active {
+    color: var(--text-secondary);
+}
+
+.breadcrumb-item a {
+    color: var(--primary-color);
+}
+
+/* Аккордеон */
+.accordion-button {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.accordion-body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.accordion-item {
+    border: 1px solid var(--border-color);
+}
+
+/* Футер */
+footer {
+    background-color: var(--bg-secondary) !important;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+/* Переключатель темы */
+.theme-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.theme-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--primary-color);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Адаптивные стили */
+@media (max-width: 768px) {
+    .navbar-nav {
+        text-align: center;
+    }
+    
+    .container {
+        padding: 0 15px;
+    }
+    
+    .table-responsive {
+        font-size: 14px;
+    }
+}
+
+/* Специфические стили для темной темы */
+[data-theme="dark"] .bg-light {
+    background-color: var(--bg-tertiary) !important;
+}
+
+[data-theme="dark"] .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .border {
+    border-color: var(--border-color) !important;
+}
+
+/* Стили для кода */
+code {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    padding: 1rem;
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+}

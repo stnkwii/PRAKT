@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+
+{% block title %}Мои тендеры - ООО "Системная безопасность"{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-3">
+        <!-- Боковое меню менеджера -->
+        <div class="card">
+            <div class="card-header bg-warning text-white">
+                <h6 class="mb-0">💼 Панель менеджера</h6>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="/dashboard" class="list-group-item list-group-item-action">
+                    📊 Обзор
+                </a>
+                <a href="/manager/tenders" class="list-group-item list-group-item-action active">
+                    📋 Мои тендеры
+                </a>
+                <a href="/manager/applications" class="list-group-item list-group-item-action">
+                    📄 Заявки
+                </a>
+                <a href="/manager/tenders/create" class="list-group-item list-group-item-action">
+                    ➕ Создать тендер
+                </a>
+            </div>
+        </div>
+
+        <!-- Статистика менеджера -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6 class="mb-0">📈 Моя статистика</h6>
+            </div>
+            <div class="card-body">
+                <div class="text-center">
+                    <h4 class="text-primary">8</h4>
+                    <small>Активных тендеров</small>
+                </div>
+                <div class="text-center mt-3">
+                    <h4 class="text-success">24</h4>
+                    <small>Всего заявок</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>📋 Мои тендеры</h2>
+            <span class="badge bg-warning">Менеджер</span>
+        </div>
+
+        <!-- Приветствие -->
+        <div class="alert alert-warning mb-4">
+            <h4>💼 Добро пожаловать, {{ check_auth().user_name or 'Менеджер' }}!</h4>
+            <p class="mb-0">Здесь вы можете управлять созданными вами тендерами и отслеживать заявки.</p>
+        </div>
+
+        <!-- Фильтры и поиск -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-5">
+                        <input type="text" class="form-control" placeholder="🔍 Поиск по названию тендера...">
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-select">
+                            <option value="">Все статусы</option>
+                            <option value="active">Активные</option>
+                            <option value="draft">Черновики</option>
+                            <option value="completed">Завершенные</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-primary w-100">🔍 Найти</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Таблица тендеров -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">📋 Список моих тендеров</h5>
+                <a href="/manager/tenders/create" class="btn btn-success btn-sm">➕ Создать тендер</a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>📄 Название тендера</th>
+                                <th>💰 Бюджет</th>
+                                <th>📅 Срок</th>
+                                <th>📊 Статус</th>
+                                <th>📨 Заявки</th>
+                                <th>⚙️ Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>#201</strong></td>
+                                <td>
+                                    <strong>Закупка серверного оборудования</strong>
+                                    <br><small class="text-muted">Для ЦОД компании</small>
+                                </td>
+                                <td>1,200,000 ₽</td>
+                                <td>25.12.2024</td>
+                                <td><span class="badge bg-success">Активный</span></td>
+                                <td><span class="badge bg-primary">8</span></td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-outline-primary" title="Редактировать">✏️</button>
+                                        <button class="btn btn-outline-info" title="Просмотр заявок">👁️</button>
+                                        <button class="btn btn-outline-success" title="Завершить">✅</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>#202</strong></td>
+                                <td>
+                                    <strong>Разработка мобильного приложения</strong>
+                                    <br><small class="text-muted">Для внутреннего использования</small>
+                                </td>
+                                <td>800,000 ₽</td>
+                                <td>20.12.2024</td>
+                                <td><span class="badge bg-success">Активный</span></td>
+                                <td><span class="badge bg-primary">5</span></td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-outline-primary" title="Редактировать">✏️</button>
+                                        <button class="btn btn-outline-info" title="Просмотр заявок">👁️</button>
+                                        <button class="btn btn-outline-success" title="Завершить">✅</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>#203</strong></td>
+                                <td>
+                                    <strong>Обучение сотрудников безопасности</strong>
+                                    <br><small class="text-muted">Курс по кибербезопасности</small>
+                                </td>
+                                <td>300,000 ₽</td>
+                                <td>15.12.2024</td>
+                                <td><span class="badge bg-warning">Завершен</span></td>
+                                <td><span class="badge bg-secondary">12</span></td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-outline-primary" title="Редактировать">✏️</button>
+                                        <button class="btn btn-outline-info" title="Просмотр заявок">👁️</button>
+                                        <button class="btn btn-outline-secondary" title="Архив">📁</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>#204</strong></td>
+                                <td>
+                                    <strong>Аудит ИБ филиала</strong>
+                                    <br><small class="text-muted">Проверка безопасности</small>
+                                </td>
+                                <td>450,000 ₽</td>
+                                <td>05.01.2025</td>
+                                <td><span class="badge bg-secondary">Черновик</span></td>
+                                <td><span class="badge bg-secondary">0</span></td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-outline-primary" title="Редактировать">✏️</button>
+                                        <button class="btn btn-outline-success" title="Опубликовать">🚀</button>
+                                        <button class="btn btn-outline-danger" title="Удалить">🗑️</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Пагинация -->
+                <nav aria-label="Навигация по страницам" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled"><a class="page-link" href="#">‹ Назад</a></li>
+                        <li class="page-item active"><span class="page-link">1</span></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Вперед ›</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function editTender(tenderId) {
+    alert(`✏️ Редактирование тендера #${tenderId} будет реализовано в будущем!`);
+}
+
+function viewApplications(tenderId) {
+    alert(`👁️ Просмотр заявок для тендера #${tenderId} будет реализован в будущем!`);
+}
+
+function completeTender(tenderId) {
+    if (confirm(`✅ Завершить тендер #${tenderId}?`)) {
+        alert(`✅ Тендер #${tenderId} успешно завершен!`);
+    }
+}
+
+function publishTender(tenderId) {
+    if (confirm(`🚀 Опубликовать тендер #${tenderId}?`)) {
+        alert(`🚀 Тендер #${tenderId} успешно опубликован!`);
+    }
+}
+</script>
+{% endblock %}

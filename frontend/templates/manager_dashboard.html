@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Панель менеджера - ООО "Системная безопасность"{% endblock %}
+
+{% block content %}
+<div class="alert alert-warning mb-4">
+    <h4>💼 Добро пожаловать, {{ session.get('user_name', 'Менеджер') }}!</h4>
+    <p class="mb-0">Вы вошли как <strong>Менеджер</strong>. Вы можете управлять тендерами и заявками.</p>
+</div>
+
+<div class="row">
+    <div class="col-lg-3">
+        <!-- Боковое меню менеджера -->
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">Панель менеджера</h6>
+            </div>
+<!-- В боковом меню обновляем ссылки -->
+<div class="list-group list-group-flush">
+    <a href="#manager-overview" class="list-group-item list-group-item-action active" data-bs-toggle="list">
+        📊 Обзор
+    </a>
+    <a href="/manager/tenders" class="list-group-item list-group-item-action">
+        📋 Мои тендеры
+    </a>
+    <a href="/manager/applications" class="list-group-item list-group-item-action">
+        📄 Заявки
+    </a>
+    <a href="/manager/tenders/create" class="list-group-item list-group-item-action">
+        ➕ Создать тендер
+    </a>
+</div>
+        </div>
+    </div>
+
+    <div class="col-lg-9">
+        <!-- Контент панели менеджера -->
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="manager-overview">
+                <h3>📊 Панель управления менеджера</h3>
+                <p>Здесь вы можете управлять тендерами и просматривать заявки.</p>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body text-center">
+                                <h4>5</h4>
+                                <p>Активных тендеров</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-success text-white">
+                            <div class="card-body text-center">
+                                <h4>12</h4>
+                                <p>Новых заявок</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body text-center">
+                                <h4>3</h4>
+                                <p>Требуют внимания</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Остальные вкладки -->
+        </div>
+    </div>
+</div>
+{% endblock %}

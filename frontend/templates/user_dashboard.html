@@ -1,0 +1,363 @@
+{% extends "base.html" %}
+
+{% block title %}Личный кабинет - Система тендерных закупок{% endblock %}
+
+{% block content %}
+<!-- В начале контента добавляем -->
+<div class="alert alert-info mb-4">
+    <h4>👋 Добро пожаловать, {{ session.get('user_name', 'Клиент') }}!</h4>
+    <p class="mb-0">Вы вошли как <strong>Клиент</strong>. Здесь вы можете просматривать тендеры и подавать заявки.</p>
+</div>
+<div class="row">
+    <div class="col-lg-3">
+        <!-- Боковое меню -->
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">Меню пользователя</h6>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="#profile" class="list-group-item list-group-item-action active" data-bs-toggle="list">
+                    👤 Профиль
+                </a>
+                <a href="#my-tenders" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                    📋 Мои тендеры
+                </a>
+                <a href="#my-applications" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                    📄 Мои заявки
+                </a>
+                <a href="#documents" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                    📎 Документы
+                </a>
+                <a href="#settings" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                    ⚙️ Настройки
+                </a>
+            </div>
+        </div>
+
+        <!-- Статистика -->
+        <div class="card mt-4">
+            <div class="card-body text-center">
+                <h6>Статистика</h6>
+                <div class="row mt-3">
+                    <div class="col-6">
+                        <h4 class="text-primary">5</h4>
+                        <small>Активных заявок</small>
+                    </div>
+                    <div class="col-6">
+                        <h4 class="text-success">12</h4>
+                        <small>Всего заявок</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Личный кабинет</h2>
+            <span class="badge bg-success">Клиент</span>
+        </div>
+
+        <!-- Вкладки контента -->
+        <div class="tab-content">
+            <!-- Вкладка профиля -->
+            <div class="tab-pane fade show active" id="profile">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">👤 Информация о профиле</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 text-center">
+                                <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center" 
+                                     style="width: 100px; height: 100px;">
+                                    <span class="h4 text-muted">👤</span>
+                                </div>
+                                <button class="btn btn-outline-primary btn-sm mt-2 w-100">Изменить фото</button>
+                            </div>
+                            <div class="col-md-9">
+                                <form id="profile-form">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Имя</label>
+                                            <input type="text" class="form-control" value="Иван">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Фамилия</label>
+                                            <input type="text" class="form-control" value="Иванов">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" class="form-control" value="client@tender-system.ru" readonly>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Телефон</label>
+                                            <input type="tel" class="form-control" value="+7 (999) 123-45-67">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Компания</label>
+                                        <input type="text" class="form-control" value="ООО 'Рога и копыта'">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Должность</label>
+                                        <input type="text" class="form-control" value="Менеджер по закупкам">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вкладка моих тендеров -->
+            <div class="tab-pane fade" id="my-tenders">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">📋 Мои тендеры</h5>
+                        <button class="btn btn-primary btn-sm">Создать тендер</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Название</th>
+                                        <th>Статус</th>
+                                        <th>Заявки</th>
+                                        <th>Срок</th>
+                                        <th>Действия</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Закупка офисной мебели</td>
+                                        <td><span class="badge bg-success">Активный</span></td>
+                                        <td>8</td>
+                                        <td>15.12.2024</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary">Просмотр</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Поставка канцелярии</td>
+                                        <td><span class="badge bg-warning">Завершен</span></td>
+                                        <td>12</td>
+                                        <td>01.12.2024</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary">Просмотр</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вкладка моих заявок -->
+            <div class="tab-pane fade" id="my-applications">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">📄 Мои заявки</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Тендер</th>
+                                        <th>Статус</th>
+                                        <th>Цена</th>
+                                        <th>Дата подачи</th>
+                                        <th>Действия</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Ремонт офисных помещений</td>
+                                        <td><span class="badge bg-info">На рассмотрении</span></td>
+                                        <td>1 200 000 ₽</td>
+                                        <td>10.12.2024</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary">Просмотр</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Поставка компьютерной техники</td>
+                                        <td><span class="badge bg-success">Принята</span></td>
+                                        <td>450 000 ₽</td>
+                                        <td>05.12.2024</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary">Просмотр</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Разработка веб-сайта</td>
+                                        <td><span class="badge bg-danger">Отклонена</span></td>
+                                        <td>300 000 ₽</td>
+                                        <td>01.12.2024</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary">Просмотр</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вкладка документов -->
+            <div class="tab-pane fade" id="documents">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">📎 Мои документы</h5>
+                        <button class="btn btn-primary btn-sm">Загрузить документ</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="card document-card">
+                                    <div class="card-body text-center">
+                                        <div class="h1 text-primary">📄</div>
+                                        <h6>Реквизиты компании.pdf</h6>
+                                        <small class="text-muted">2.3 MB</small>
+                                        <div class="mt-2">
+                                            <button class="btn btn-sm btn-outline-primary">Скачать</button>
+                                            <button class="btn btn-sm btn-outline-danger">Удалить</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card document-card">
+                                    <div class="card-body text-center">
+                                        <div class="h1 text-success">📊</div>
+                                        <h6>Финансовая отчетность.xlsx</h6>
+                                        <small class="text-muted">1.8 MB</small>
+                                        <div class="mt-2">
+                                            <button class="btn btn-sm btn-outline-primary">Скачать</button>
+                                            <button class="btn btn-sm btn-outline-danger">Удалить</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card document-card">
+                                    <div class="card-body text-center">
+                                        <div class="h1 text-warning">📝</div>
+                                        <h6>Лицензии и сертификаты.zip</h6>
+                                        <small class="text-muted">5.1 MB</small>
+                                        <div class="mt-2">
+                                            <button class="btn btn-sm btn-outline-primary">Скачать</button>
+                                            <button class="btn btn-sm btn-outline-danger">Удалить</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вкладка настроек -->
+            <div class="tab-pane fade" id="settings">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">⚙️ Настройки учетной записи</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="settings-form">
+                            <div class="mb-3">
+                                <h6>Уведомления</h6>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="email-notifications" checked>
+                                    <label class="form-check-label" for="email-notifications">
+                                        Email уведомления
+                                    </label>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="sms-notifications">
+                                    <label class="form-check-label" for="sms-notifications">
+                                        SMS уведомления
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <h6>Язык и регион</h6>
+                                <select class="form-select">
+                                    <option selected>Русский</option>
+                                    <option>English</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <h6>Часовой пояс</h6>
+                                <select class="form-select">
+                                    <option selected>Москва (UTC+3)</option>
+                                    <option>Калининград (UTC+2)</option>
+                                    <option>Самара (UTC+4)</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <h6>Безопасность</h6>
+                                <button type="button" class="btn btn-outline-warning btn-sm">
+                                    Сменить пароль
+                                </button>
+                                <button type="button" class="btn btn-outline-danger btn-sm ms-2">
+                                    Двухфакторная аутентификация
+                                </button>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Сохранить настройки</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.document-card {
+    transition: transform 0.2s;
+}
+
+.document-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Активация вкладок
+    const triggerTabList = [].slice.call(document.querySelectorAll('a[data-bs-toggle="list"]'))
+    triggerTabList.forEach(function (triggerEl) {
+        const tabTrigger = new bootstrap.Tab(triggerEl)
+
+        triggerEl.addEventListener('click', function (event) {
+            event.preventDefault()
+            tabTrigger.show()
+        })
+    })
+
+    // Обработка форм
+    document.getElementById('profile-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Изменения профиля сохранены!');
+    });
+
+    document.getElementById('settings-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Настройки сохранены!');
+    });
+});
+</script>
+{% endblock %}

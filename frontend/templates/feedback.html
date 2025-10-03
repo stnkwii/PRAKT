@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Обратная связь - Система тендерных закупок{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <h1>Обратная связь</h1>
+        <p class="lead">Мы ценим ваше мнение и готовы помочь с любыми вопросами</p>
+        
+        <div class="card">
+            <div class="card-body">
+                <form id="feedback-form">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="name" class="form-label">Ваше имя *</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">Email *</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Тема *</label>
+                        <select class="form-select" id="subject" required>
+                            <option value="">Выберите тему</option>
+                            <option value="technical">Техническая проблема</option>
+                            <option value="question">Вопрос по работе системы</option>
+                            <option value="suggestion">Предложение по улучшению</option>
+                            <option value="partnership">Сотрудничество</option>
+                            <option value="other">Другое</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Сообщение *</label>
+                        <textarea class="form-control" id="message" rows="6" required 
+                                  placeholder="Опишите вашу проблему, вопрос или предложение..."></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="attachment" class="form-label">Прикрепить файл (необязательно)</label>
+                        <input type="file" class="form-control" id="attachment">
+                        <div class="form-text">Максимальный размер файла: 10MB. Допустимые форматы: PDF, JPG, PNG, DOC, DOCX</div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-lg">Отправить сообщение</button>
+                </form>
+                
+                <div id="feedback-message" class="mt-3"></div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>📞 Телефон поддержки</h5>
+                        <p class="mb-1">+7 (495) 123-45-67</p>
+                        <small class="text-muted">Пн-Пт: 9:00-18:00</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>✉️ Email поддержки</h5>
+                        <p class="mb-1">support@tender-system.ru</p>
+                        <small class="text-muted">Ответим в течение 24 часов</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('feedback-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const messageDiv = document.getElementById('feedback-message');
+    messageDiv.innerHTML = `
+        <div class="alert alert-success">
+            <h5>Спасибо за ваше сообщение!</h5>
+            <p>Мы получили ваше обращение и свяжемся с вами в ближайшее время.</p>
+            <p>Номер вашего обращения: <strong>#${Math.random().toString(36).substr(2, 9).toUpperCase()}</strong></p>
+        </div>
+    `;
+    
+    // Очищаем форму
+    document.getElementById('feedback-form').reset();
+    
+    // Прокручиваем к сообщению об успехе
+    messageDiv.scrollIntoView({ behavior: 'smooth' });
+});
+</script>
+{% endblock %}

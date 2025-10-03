@@ -1,0 +1,607 @@
+{% extends "base.html" %}
+
+{% block title %}Управление пользователями - ООО "Системная безопасность"{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-3">
+        <!-- Боковое меню администратора -->
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h6 class="mb-0">👑 Панель администратора</h6>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="/dashboard" class="list-group-item list-group-item-action">
+                    📊 Обзор системы
+                </a>
+                <a href="/admin/users" class="list-group-item list-group-item-action active">
+                    👥 Управление пользователями
+                </a>
+                <a href="/admin/tenders" class="list-group-item list-group-item-action">
+                    📋 Управление тендерами
+                </a>
+                <a href="/admin/settings" class="list-group-item list-group-item-action">
+                    ⚙️ Системные настройки
+                </a>
+                <a href="/admin/reports" class="list-group-item list-group-item-action">
+                    📈 Отчеты и аналитика
+                </a>
+            </div>
+        </div>
+
+        <!-- Быстрые действия -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6 class="mb-0">⚡ Быстрые действия</h6>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-outline-primary btn-sm w-100 mb-2" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                    ➕ Добавить пользователя
+                </button>
+                <button class="btn btn-outline-success btn-sm w-100 mb-2" onclick="exportUsers()">
+                    📊 Экспорт в Excel
+                </button>
+                <button class="btn btn-outline-info btn-sm w-100" onclick="sendBulkEmail()">
+                    ✉️ Массовая рассылка
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>👥 Управление пользователями</h2>
+            <span class="badge bg-danger">Администратор</span>
+        </div>
+
+        <!-- Статистика пользователей -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body text-center py-3">
+                        <h4 id="total-users">156</h4>
+                        <small>Всего пользователей</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body text-center py-3">
+                        <h4 id="active-users">142</h4>
+                        <small>Активных</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-warning text-white">
+                    <div class="card-body text-center py-3">
+                        <h4 id="new-users">8</h4>
+                        <small>Новых (за 7 дней)</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-info text-white">
+                    <div class="card-body text-center py-3">
+                        <h4 id="admins-count">3</h4>
+                        <small>Администраторов</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Фильтры и поиск -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" id="user-search" placeholder="🔍 Поиск по email или имени...">
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="role-filter">
+                            <option value="">Все роли</option>
+                            <option value="admin">Администраторы</option>
+                            <option value="manager">Менеджеры</option>
+                            <option value="client">Клиенты</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="status-filter">
+                            <option value="">Все статусы</option>
+                            <option value="active">Активные</option>
+                            <option value="inactive">Неактивные</option>
+                            <option value="blocked">Заблокированные</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-primary w-100" onclick="loadUsers()">
+                            🔍 Применить
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Таблица пользователей -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">📋 Список пользователей</h5>
+                <div>
+                    <span class="badge bg-light text-dark" id="users-count">Загрузка...</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>👤 Пользователь</th>
+                                <th>📧 Email</th>
+                                <th>🎭 Роль</th>
+                                <th>📅 Регистрация</th>
+                                <th>📊 Статус</th>
+                                <th>⚙️ Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <!-- Данные будут загружены через JavaScript -->
+                            <tr>
+                                <td colspan="7" class="text-center py-4">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Загрузка...</span>
+                                    </div>
+                                    <p class="mt-2 text-muted">Загружаем список пользователей...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Пагинация -->
+                <nav aria-label="Навигация по страницам" class="mt-4">
+                    <ul class="pagination justify-content-center" id="pagination">
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно добавления пользователя -->
+<div class="modal fade" id="addUserModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">➕ Добавить нового пользователя</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="add-user-form">
+                    <div class="mb-3">
+                        <label class="form-label">📧 Email</label>
+                        <input type="email" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">👤 Имя</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">🔒 Пароль</label>
+                        <input type="password" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">🎭 Роль</label>
+                        <select class="form-select" required>
+                            <option value="client">Клиент</option>
+                            <option value="manager">Менеджер</option>
+                            <option value="admin">Администратор</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-primary" onclick="addUser()">Добавить пользователя</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно редактирования пользователя -->
+<div class="modal fade" id="editUserModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">✏️ Редактирование пользователя</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-user-form">
+                    <input type="hidden" id="edit-user-id">
+                    <div class="mb-3">
+                        <label class="form-label">📧 Email</label>
+                        <input type="email" class="form-control" id="edit-user-email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">👤 Имя</label>
+                        <input type="text" class="form-control" id="edit-user-name">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">🎭 Роль</label>
+                        <select class="form-select" id="edit-user-role" required>
+                            <option value="client">Клиент</option>
+                            <option value="manager">Менеджер</option>
+                            <option value="admin">Администратор</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">📊 Статус</label>
+                        <select class="form-select" id="edit-user-status" required>
+                            <option value="active">Активный</option>
+                            <option value="inactive">Неактивный</option>
+                            <option value="blocked">Заблокирован</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-primary" onclick="saveUserChanges()">Сохранить изменения</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Mock данные пользователей
+const MOCK_USERS = [
+    {
+        id: 1,
+        email: 'admin@sys-sec.ru',
+        name: 'Главный администратор',
+        role: 'admin',
+        status: 'active',
+        created_at: '2024-01-01T10:00:00',
+        last_login: '2024-12-19T15:30:00'
+    },
+    {
+        id: 2,
+        email: 'manager@sys-sec.ru',
+        name: 'Иван Менеджеров',
+        role: 'manager',
+        status: 'active',
+        created_at: '2024-01-02T11:20:00',
+        last_login: '2024-12-18T14:15:00'
+    },
+    {
+        id: 3,
+        email: 'client@sys-sec.ru',
+        name: 'Петр Клиентов',
+        role: 'client',
+        status: 'active',
+        created_at: '2024-01-03T09:45:00',
+        last_login: '2024-12-19T10:20:00'
+    },
+    {
+        id: 4,
+        email: 'user1@example.com',
+        name: 'Анна Смирнова',
+        role: 'client',
+        status: 'active',
+        created_at: '2024-01-04T16:30:00',
+        last_login: '2024-12-17T11:45:00'
+    },
+    {
+        id: 5,
+        email: 'user2@example.com',
+        name: 'Сергей Иванов',
+        role: 'client',
+        status: 'inactive',
+        created_at: '2024-01-05T14:15:00',
+        last_login: '2024-11-20T09:30:00'
+    },
+    {
+        id: 6,
+        email: 'user3@example.com',
+        name: 'Мария Петрова',
+        role: 'manager',
+        status: 'active',
+        created_at: '2024-01-06T13:20:00',
+        last_login: '2024-12-19T16:40:00'
+    }
+];
+
+let currentPage = 1;
+const usersPerPage = 5;
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadUsers();
+    updateStats();
+});
+
+function loadUsers(page = 1) {
+    currentPage = page;
+    
+    const search = document.getElementById('user-search').value.toLowerCase();
+    const roleFilter = document.getElementById('role-filter').value;
+    const statusFilter = document.getElementById('status-filter').value;
+    
+    // Фильтрация пользователей
+    let filteredUsers = MOCK_USERS.filter(user => {
+        const matchesSearch = !search || 
+            user.email.toLowerCase().includes(search) || 
+            (user.name && user.name.toLowerCase().includes(search));
+        const matchesRole = !roleFilter || user.role === roleFilter;
+        const matchesStatus = !statusFilter || user.status === statusFilter;
+        
+        return matchesSearch && matchesRole && matchesStatus;
+    });
+    
+    // Пагинация
+    const totalUsers = filteredUsers.length;
+    const totalPages = Math.ceil(totalUsers / usersPerPage);
+    const startIndex = (page - 1) * usersPerPage;
+    const paginatedUsers = filteredUsers.slice(startIndex, startIndex + usersPerPage);
+    
+    displayUsers(paginatedUsers);
+    setupPagination(totalUsers, totalPages, page);
+    updateStats();
+}
+
+function displayUsers(users) {
+    const tbody = document.getElementById('users-table-body');
+    
+    if (users.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7" class="text-center py-4">
+                    <div class="h1 text-muted">👥</div>
+                    <h5 class="text-muted">Пользователи не найдены</h5>
+                    <p class="text-muted">Попробуйте изменить параметры поиска</p>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    let html = '';
+    users.forEach(user => {
+        const createdDate = new Date(user.created_at).toLocaleDateString('ru-RU');
+        const lastLogin = user.last_login ? new Date(user.last_login).toLocaleDateString('ru-RU') : 'Никогда';
+        
+        html += `
+            <tr>
+                <td><strong>#${user.id}</strong></td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2" 
+                             style="width: 32px; height: 32px; color: white; font-size: 14px;">
+                            👤
+                        </div>
+                        <div>
+                            <div class="fw-bold">${user.name || 'Не указано'}</div>
+                            <small class="text-muted">Последний вход: ${lastLogin}</small>
+                        </div>
+                    </div>
+                </td>
+                <td>${user.email}</td>
+                <td>
+                    <span class="badge ${getRoleBadgeClass(user.role)}">
+                        ${getRoleText(user.role)}
+                    </span>
+                </td>
+                <td>${createdDate}</td>
+                <td>
+                    <span class="badge ${getStatusBadgeClass(user.status)}">
+                        ${getStatusText(user.status)}
+                    </span>
+                </td>
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-outline-primary" onclick="editUser(${user.id})" title="Редактировать">
+                            ✏️
+                        </button>
+                        <button class="btn btn-outline-${user.status === 'active' ? 'warning' : 'success'}" 
+                                onclick="toggleUserStatus(${user.id})" 
+                                title="${user.status === 'active' ? 'Деактивировать' : 'Активировать'}">
+                            ${user.status === 'active' ? '⏸️' : '▶️'}
+                        </button>
+                        <button class="btn btn-outline-danger" onclick="deleteUser(${user.id})" title="Удалить">
+                            🗑️
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    });
+    
+    tbody.innerHTML = html;
+}
+
+function getRoleBadgeClass(role) {
+    const classes = {
+        'admin': 'bg-danger',
+        'manager': 'bg-warning',
+        'client': 'bg-success'
+    };
+    return classes[role] || 'bg-secondary';
+}
+
+function getRoleText(role) {
+    const texts = {
+        'admin': 'Админ',
+        'manager': 'Менеджер',
+        'client': 'Клиент'
+    };
+    return texts[role] || role;
+}
+
+function getStatusBadgeClass(status) {
+    const classes = {
+        'active': 'bg-success',
+        'inactive': 'bg-secondary',
+        'blocked': 'bg-danger'
+    };
+    return classes[status] || 'bg-secondary';
+}
+
+function getStatusText(status) {
+    const texts = {
+        'active': 'Активен',
+        'inactive': 'Неактивен',
+        'blocked': 'Заблокирован'
+    };
+    return texts[status] || status;
+}
+
+function setupPagination(totalUsers, totalPages, currentPage) {
+    const pagination = document.getElementById('pagination');
+    const usersCount = document.getElementById('users-count');
+    
+    usersCount.textContent = `${totalUsers} пользователей`;
+    
+    if (totalPages <= 1) {
+        pagination.innerHTML = '';
+        return;
+    }
+    
+    let html = '';
+    
+    // Предыдущая страница
+    html += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+        <a class="page-link" href="#" onclick="loadUsers(${currentPage - 1})">‹ Назад</a>
+    </li>`;
+    
+    // Страницы
+    for (let i = 1; i <= totalPages; i++) {
+        if (i === currentPage) {
+            html += `<li class="page-item active"><span class="page-link">${i}</span></li>`;
+        } else {
+            html += `<li class="page-item"><a class="page-link" href="#" onclick="loadUsers(${i})">${i}</a></li>`;
+        }
+    }
+    
+    // Следующая страница
+    html += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+        <a class="page-link" href="#" onclick="loadUsers(${currentPage + 1})">Вперед ›</a>
+    </li>`;
+    
+    pagination.innerHTML = html;
+}
+
+function updateStats() {
+    const totalUsers = MOCK_USERS.length;
+    const activeUsers = MOCK_USERS.filter(u => u.status === 'active').length;
+    const newUsers = MOCK_USERS.filter(u => {
+        const created = new Date(u.created_at);
+        const weekAgo = new Date();
+        weekAgo.setDate(weekAgo.getDate() - 7);
+        return created > weekAgo;
+    }).length;
+    const adminsCount = MOCK_USERS.filter(u => u.role === 'admin').length;
+    
+    document.getElementById('total-users').textContent = totalUsers;
+    document.getElementById('active-users').textContent = activeUsers;
+    document.getElementById('new-users').textContent = newUsers;
+    document.getElementById('admins-count').textContent = adminsCount;
+}
+
+// Функции управления пользователями
+function editUser(userId) {
+    const user = MOCK_USERS.find(u => u.id === userId);
+    if (user) {
+        document.getElementById('edit-user-id').value = user.id;
+        document.getElementById('edit-user-email').value = user.email;
+        document.getElementById('edit-user-name').value = user.name || '';
+        document.getElementById('edit-user-role').value = user.role;
+        document.getElementById('edit-user-status').value = user.status;
+        
+        const modal = new bootstrap.Modal(document.getElementById('editUserModal'));
+        modal.show();
+    }
+}
+
+function saveUserChanges() {
+    const userId = parseInt(document.getElementById('edit-user-id').value);
+    const userIndex = MOCK_USERS.findIndex(u => u.id === userId);
+    
+    if (userIndex !== -1) {
+        MOCK_USERS[userIndex].email = document.getElementById('edit-user-email').value;
+        MOCK_USERS[userIndex].name = document.getElementById('edit-user-name').value;
+        MOCK_USERS[userIndex].role = document.getElementById('edit-user-role').value;
+        MOCK_USERS[userIndex].status = document.getElementById('edit-user-status').value;
+        
+        alert('✅ Изменения пользователя сохранены!');
+        loadUsers(currentPage);
+        
+        const modal = bootstrap.Modal.getInstance(document.getElementById('editUserModal'));
+        modal.hide();
+    }
+}
+
+function toggleUserStatus(userId) {
+    const user = MOCK_USERS.find(u => u.id === userId);
+    if (user) {
+        user.status = user.status === 'active' ? 'inactive' : 'active';
+        loadUsers(currentPage);
+        alert(`✅ Статус пользователя изменен на "${getStatusText(user.status)}"`);
+    }
+}
+
+function deleteUser(userId) {
+    if (confirm('❓ Вы уверены, что хотите удалить этого пользователя?')) {
+        const userIndex = MOCK_USERS.findIndex(u => u.id === userId);
+        if (userIndex !== -1 && MOCK_USERS[userIndex].email !== 'admin@sys-sec.ru') {
+            MOCK_USERS.splice(userIndex, 1);
+            loadUsers(currentPage);
+            alert('✅ Пользователь удален!');
+        } else {
+            alert('❌ Нельзя удалить основного администратора!');
+        }
+    }
+}
+
+function addUser() {
+    alert('✅ Функция добавления пользователя будет реализована в будущем!');
+    const modal = bootstrap.Modal.getInstance(document.getElementById('addUserModal'));
+    modal.hide();
+}
+
+function exportUsers() {
+    alert('📊 Экспорт данных в Excel будет реализован в будущем!');
+}
+
+function sendBulkEmail() {
+    alert('✉️ Функция массовой рассылки будет реализована в будущем!');
+}
+
+// Поиск при вводе
+document.getElementById('user-search').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        loadUsers(1);
+    }
+});
+</script>
+
+<style>
+.table th {
+    border-top: none;
+    font-weight: 600;
+    color: #495057;
+}
+
+.btn-group-sm > .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+.card {
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-1px);
+}
+</style>
+{% endblock %}

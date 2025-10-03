@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Доступ запрещен - ООО "Системная безопасность"{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6 text-center">
+        <div class="card border-danger">
+            <div class="card-body py-5">
+                <div class="mb-4">
+                    <div class="text-danger" style="font-size: 6rem;">🚫</div>
+                </div>
+                <h2 class="text-danger">Доступ запрещен</h2>
+                <p class="lead">У вас недостаточно прав для просмотра этой страницы.</p>
+                
+                <div class="alert alert-warning mt-4">
+                    <strong>Требуемая роль:</strong> Администратор<br>
+                    <strong>Ваша роль:</strong> {{ check_auth().user_role or 'Не авторизован' }}
+                </div>
+                
+                <div class="mt-4">
+                    <a href="/dashboard" class="btn btn-primary me-2">📊 В личный кабинет</a>
+                    <a href="/" class="btn btn-outline-primary">🏠 На главную</a>
+                </div>
+                
+                {% if not check_auth().is_authenticated %}
+                <div class="mt-3">
+                    <a href="/login" class="btn btn-outline-success">🔐 Войти в систему</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

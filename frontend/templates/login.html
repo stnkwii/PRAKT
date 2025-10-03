@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+
+{% block title %}Вход - ООО "Системная безопасность"{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">🔐 Вход в систему</h4>
+            </div>
+            <div class="card-body">
+                <!-- Уведомление о демо-режиме -->
+                <div id="demo-notification" class="alert alert-info">
+                    <strong>💡 Демо-режим:</strong> Используются тестовые учетные записи. Все три аккаунта активны.
+                </div>
+                
+                <form id="login-form">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">📧 Email</label>
+                        <input type="email" class="form-control" id="email" required 
+                               placeholder="Введите ваш email">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">🔒 Пароль</label>
+                        <input type="password" class="form-control" id="password" required 
+                               placeholder="Введите ваш пароль">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" id="login-button">
+                        <span class="spinner-border spinner-border-sm d-none" id="login-spinner" role="status"></span>
+                        🚀 Войти в систему
+                    </button>
+                </form>
+                
+                <div class="mt-3 text-center">
+                    <p>Нет аккаунта? <a href="/register" class="text-decoration-none">📝 Зарегистрироваться</a></p>
+                </div>
+                
+                <div id="login-message" class="mt-3"></div>
+            </div>
+        </div>
+        
+        <!-- Тестовые учетные записи -->
+        <div class="card mt-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">👥 Тестовые учетные записи</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100 border-danger">
+                            <div class="card-body text-center">
+                                <h6 class="card-title">👑 Администратор</h6>
+                                <p class="card-text small">
+                                    <strong>Email:</strong> admin@sys-sec.ru<br>
+                                    <strong>Пароль:</strong> admin123
+                                </p>
+                                <button class="btn btn-outline-danger btn-sm test-account" data-account="admin">
+                                    Быстрый вход
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100 border-warning">
+                            <div class="card-body text-center">
+                                <h6 class="card-title">💼 Менеджер</h6>
+                                <p class="card-text small">
+                                    <strong>Email:</strong> manager@sys-sec.ru<br>
+                                    <strong>Пароль:</strong> manager123
+                                </p>
+                                <button class="btn btn-outline-warning btn-sm test-account" data-account="manager">
+                                    Быстрый вход
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100 border-success">
+                            <div class="card-body text-center">
+                                <h6 class="card-title">👤 Клиент</h6>
+                                <p class="card-text small">
+                                    <strong>Email:</strong> client@sys-sec.ru<br>
+                                    <strong>Пароль:</strong> client123
+                                </p>
+                                <button class="btn btn-outline-success btn-sm test-account" data-account="client">
+                                    Быстрый вход
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert alert-warning mt-3">
+                    <small>
+                        <strong>💡 Подсказка:</strong> Каждая учетная запись имеет разные права доступа:
+                        <ul class="mb-0 mt-1">
+                            <li><strong>Администратор</strong> - полный доступ ко всем функциям</li>
+                            <li><strong>Менеджер</strong> - управление тендерами и заявками</li>
+                            <li><strong>Клиент</strong> - просмотр тендеров и подача заявок</li>
+                        </ul>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('login-form');
+    const loginButton = document.getElementById('login-button');
+    const loginSpinner = document.getElementById('login-spinner');
+    const loginMessage = document.getElementById('login-message');
+    
+    // Быстрый вход для тестовых аккаунтов
+    document.querySelectorAll('.test-account').forEach(button => {
+        button.addEventListener('click', function() {
+            const account = this.dataset.account;
+            const accounts = {
+                'admin': { 
+                    email: 'admin@sys-sec.ru', 
+                    password: 'admin123',
+                    role: 'Администратор'
+                },
+                'manager': { 
+                    email: 'manager@sys-sec.ru', 
+                    password: 'manager123',
+                    role: 'Менеджер'
+                },
+                'client': { 
+                    email: 'client@sys-sec.ru', 
+                    password: 'client123',
+                    role: 'Клиент'
+                }
+            };
+            
+            if (accounts[account]) {
+                document.getElementById('email').value = accounts[account].email;
+                document.getElementById('password').value = accounts[account].password;
+                
+                // Показываем сообщение о выбранной роли
+                loginMessage.innerHTML = `
+                    <div class="alert alert-info">
+                        <strong>Выбрана роль:</strong> ${accounts[account].role}<br>
+                        <small>Нажмите "Войти в систему" для продолжения</small>
+                    </div>
+                `;
+                
+                // Прокручиваем к форме
+                loginForm.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
+    
+    loginForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        // Валидация
+        if (!email || !password) {
+            loginMessage.innerHTML = `
+                <div class="alert alert-danger">
+                    ❌ Пожалуйста, заполните все поля
+                </div>
+            `;
+            return;
+        }
+        
+        // Показываем спиннер
+        loginButton.disabled = true;
+        loginSpinner.classList.remove('d-none');
+        loginButton.innerHTML = 'Выполняется вход...';
+        
+        // Очищаем предыдущие сообщения
+        loginMessage.innerHTML = '';
+        
+        try {
+            const result = await safeLogin(email, password);
+            
+            if (result.success) {
+                loginMessage.innerHTML = `
+                    <div class="alert alert-success">
+                        ✅ <strong>Успешный вход!</strong><br>
+                        Добро пожаловать, ${result.data.name || result.data.email}!<br>
+                        <small>Перенаправляем в личный кабинет...</small>
+                    </div>
+                `;
+                
+                // Перенаправляем в личный кабинет
+                setTimeout(() => {
+                    window.location.href = '/dashboard';
+                }, 1500);
+            } else {
+                loginMessage.innerHTML = `
+                    <div class="alert alert-danger">
+                        ❌ <strong>Ошибка входа:</strong><br>
+                        ${result.error}
+                    </div>
+                `;
+            }
+        } catch (error) {
+            loginMessage.innerHTML = `
+                <div class="alert alert-danger">
+                    ❌ <strong>Неожиданная ошибка:</strong><br>
+                    ${error.message}
+                </div>
+            `;
+        } finally {
+            // Восстанавливаем кнопку
+            loginButton.disabled = false;
+            loginSpinner.classList.add('d-none');
+            loginButton.innerHTML = '🚀 Войти в систему';
+        }
+    });
+});
+</script>
+
+<style>
+.test-account {
+    transition: all 0.3s ease;
+}
+
+.test-account:hover {
+    transform: translateY(-2px);
+}
+
+.card {
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+</style>
+{% endblock %}

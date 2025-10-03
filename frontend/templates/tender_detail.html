@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Тендер {{ tender.id }} - ООО "Системная безопасность"{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Главная</a></li>
+                <li class="breadcrumb-item"><a href="/tenders">Тендеры</a></li>
+                <li class="breadcrumb-item active">Тендер {{ tender.id }}</li>
+            </ol>
+        </nav>
+
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h2 class="mb-0">{{ tender.title }}</h2>
+                <span class="badge {{ 'bg-success' if tender.status == 'active' else 'bg-secondary' }}">
+                    {{ 'Активный' if tender.status == 'active' else 'Черновик' }}
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h5>📋 Описание</h5>
+                        <p>{{ tender.description }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>🏢 Заказчик</h5>
+                        <p>{{ tender.customer }}</p>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <h5>💰 Бюджет</h5>
+                        <p class="h4 text-primary">
+                            {% if tender.budget %}
+                                {{ "{:,.0f}".format(tender.budget|float) }} {{ tender.currency }}
+                            {% else %}
+                                Не указан
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="col-md-3">
+                        <h5>📅 Срок подачи</h5>
+                        <p class="h5 {% if tender.deadline and tender.deadline|string < now|string %}text-danger{% else %}text-success{% endif %}">
+                            {{ tender.deadline[:10] if tender.deadline else 'Не указан' }}
+                        </p>
+                    </div>
+                    <div class="col-md-3">
+                        <h5>📄 Заявок</h5>
+                        <p class="h5">{{ tender.applications_count or 0 }}</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h5>🔒 Тип</h5>
+                        <p>{{ 'Открытый' if tender.tender_type == 'open' else 'Закрытый' }}</p>
+                    </div>
+                </div>
+
+                {% if session.get('user_id') %}
+                <div class="text-center mt-4">
+                    <a href="/tenders/{{ tender.id }}/apply" class="btn btn-primary btn-lg">
+                        📝 Подать заявку на участие
+                    </a>
+                </div>
+                {% else %}
+                <div class="alert alert-warning text-center">
+                    <h5>🔒 Требуется авторизация</h5>
+                    <p>Для участия в тендере необходимо войти в систему</p>
+                    <a href="/login" class="btn btn-outline-primary">Войти</a>
+                    <a href="/register" class="btn btn-primary">Зарегистрироваться</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">📋 Информация о тендере</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <tr>
+                        <td><strong>ID тендера:</strong></td>
+                        <td>{{ tender.id }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Статус:</strong></td>
+                        <td>
+                            <span class="badge {{ 'bg-success' if tender.status == 'active' else 'bg-secondary' }}">
+                                {{ 'Активный' if tender.status == 'active' else 'Черновик' }}
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Дата создания:</strong></td>
+                        <td>{{ tender.created_at[:10] if tender.created_at else 'Не указана' }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Тип тендера:</strong></td>
+                        <td>{{ 'Открытый' if tender.tender_type == 'open' else 'Закрытый' }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0">📞 Контакты</h5>
+            </div>
+            <div class="card-body">
+                <p>По вопросам участия в тендере обращайтесь:</p>
+                <p>📞 +7 (495) 123-45-67<br>
+                ✉️ tenders@sys-sec.ru</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

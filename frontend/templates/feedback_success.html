@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Сообщение отправлено - Система тендерных закупок{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card text-center">
+            <div class="card-body py-5">
+                <div class="mb-4">
+                    <div class="text-success" style="font-size: 4rem;">✓</div>
+                </div>
+                <h2>Сообщение отправлено!</h2>
+                <p class="lead">Мы получили ваше обращение и свяжемся с вами в ближайшее время.</p>
+                
+                <div class="alert alert-info mt-4">
+                    <strong>Номер вашего обращения:</strong><br>
+                    <span class="h5">#{{ range(100000, 999999) | random }}</span>
+                </div>
+                
+                <p class="text-muted mt-3">
+                    Сохраните этот номер для отслеживания статуса вашего обращения.
+                </p>
+                
+                <div class="mt-4">
+                    <a href="/" class="btn btn-primary me-2">На главную</a>
+                    <a href="/contact" class="btn btn-outline-secondary">Контактная информация</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

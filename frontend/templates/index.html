@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+
+{% block title %}Главная - ООО "Системная безопасность"{% endblock %}
+
+{% block content %}
+<!-- Герой секция -->
+<div class="hero-section text-center py-5 mb-5 rounded" style="background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white;">
+    <div class="container">
+        <h1 class="display-4 fw-bold">🔒 ООО "Системная безопасность"</h1>
+        <p class="lead">Профессиональные решения в области информационной безопасности и автоматизации бизнес-процессов</p>
+        <div class="mt-4">
+            <a href="/tenders" class="btn btn-light btn-lg me-3">📋 Смотреть тендеры</a>
+            <a href="/register" class="btn btn-outline-light btn-lg">🚀 Начать работу</a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <!-- О компании -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2>🏢 О компании</h2>
+                <p class="lead">ООО "Системная безопасность" - ведущий поставщик решений в области информационной безопасности и автоматизации бизнес-процессов.</p>
+                
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <h5>🎯 Наша миссия</h5>
+                        <p>Обеспечение цифровой безопасности бизнеса через внедрение современных технологий и профессиональных решений.</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>⭐ Наши ценности</h5>
+                        <ul>
+                            <li>Надежность и безопасность</li>
+                            <li>Инновации и технологии</li>
+                            <li>Профессионализм команды</li>
+                            <li>Клиентоориентированность</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Основные услуги -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2>🛡️ Основные направления</h2>
+                <div class="row mt-4">
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100 border-primary">
+                            <div class="card-body text-center">
+                                <div class="h1 text-primary">🔐</div>
+                                <h5>Информационная безопасность</h5>
+                                <p>Комплексные решения по защите данных и информационной инфраструктуры</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100 border-success">
+                            <div class="card-body text-center">
+                                <div class="h1 text-success">🤖</div>
+                                <h5>Автоматизация процессов</h5>
+                                <p>Внедрение систем автоматизации закупок и бизнес-процессов</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100 border-warning">
+                            <div class="card-body text-center">
+                                <div class="h1 text-warning">📊</div>
+                                <h5>Аналитика и отчетность</h5>
+                                <p>Системы мониторинга, анализа и отчетности бизнес-процессов</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <!-- Активные тендеры -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">📋 Активные тендеры</h5>
+            </div>
+            <div class="card-body">
+                <div id="recent-tenders">
+                    {% if recent_tenders %}
+                        {% for tender in recent_tenders %}
+                        <div class="mb-3 pb-3 border-bottom">
+                            <h6><a href="/tenders/{{ tender.id }}" class="text-decoration-none">{{ tender.title }}</a></h6>
+                            <small class="text-muted">
+                                Бюджет: {{ tender.budget|default('не указан', true) }} {{ tender.currency|default('') }} |
+                                До: {{ tender.deadline[:10] if tender.deadline else 'не указано' }}
+                            </small>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-3">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Загрузка...</span>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                <a href="/tenders" class="btn btn-outline-primary btn-sm w-100 mt-3">Все тендеры</a>
+            </div>
+        </div>
+        
+        <!-- Статистика -->
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">📈 Статистика платформы</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-6 mb-3">
+                        <div class="border rounded p-2">
+                            <h4 class="text-primary mb-1" id="active-tenders">12</h4>
+                            <small>Активных тендеров</small>
+                        </div>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <div class="border rounded p-2">
+                            <h4 class="text-success mb-1" id="total-applications">47</h4>
+                            <small>Всего заявок</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="border rounded p-2">
+                            <h4 class="text-warning mb-1" id="registered-users">156</h4>
+                            <small>Пользователей</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="border rounded p-2">
+                            <h4 class="text-info mb-1" id="completed-tenders">89</h4>
+                            <small>Завершено тендеров</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Контакты -->
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">📞 Контакты</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>ООО "Системная безопасность"</strong></p>
+                <p>📞 +7 (495) 123-45-67<br>
+                ✉️ info@sys-sec.ru<br>
+                🌐 sys-sec.ru</p>
+                <a href="/contact" class="btn btn-outline-info btn-sm w-100">Связаться с нами</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Преимущества -->
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="text-center mb-4">🌟 Почему выбирают нас?</h2>
+                <div class="row">
+                    <div class="col-md-3 text-center mb-3">
+                        <div class="h1 text-primary">🛡️</div>
+                        <h5>Безопасность</h5>
+                        <p>Сертифицированные решения в области информационной безопасности</p>
+                    </div>
+                    <div class="col-md-3 text-center mb-3">
+                        <div class="h1 text-success">⚡</div>
+                        <h5>Скорость</h5>
+                        <p>Быстрое внедрение и настройка систем под требования заказчика</p>
+                    </div>
+                    <div class="col-md-3 text-center mb-3">
+                        <div class="h1 text-warning">🔧</div>
+                        <h5>Поддержка</h5>
+                        <p>Круглосуточная техническая поддержка и сопровождение</p>
+                    </div>
+                    <div class="col-md-3 text-center mb-3">
+                        <div class="h1 text-info">📚</div>
+                        <h5>Опыт</h5>
+                        <p>Более 10 лет успешной работы на рынке информационной безопасности</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Загрузка статистики
+    loadStatistics();
+});
+
+function loadStatistics() {
+    // Здесь будет API вызов
+    document.getElementById('active-tenders').textContent = '12';
+    document.getElementById('total-applications').textContent = '47';
+    document.getElementById('registered-users').textContent = '156';
+    document.getElementById('completed-tenders').textContent = '89';
+}
+</script>
+
+<style>
+.hero-section {
+    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+    color: white;
+    border-radius: 15px;
+    padding: 4rem 2rem;
+}
+
+.hero-section h1 {
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.card {
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+</style>
+{% endblock %}

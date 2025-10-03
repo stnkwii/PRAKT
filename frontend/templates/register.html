@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Регистрация - Система тендерных закупок{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Регистрация в системе</h4>
+            </div>
+            <div class="card-body">
+                <form id="register-form">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Пароль</label>
+                        <input type="password" class="form-control" id="password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirm-password" class="form-label">Подтверждение пароля</label>
+                        <input type="password" class="form-control" id="confirm-password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Тип учетной записи</label>
+                        <select class="form-select" id="role" required>
+                            <option value="client">Поставщик (участник тендеров)</option>
+                            <option value="manager">Заказчик (организатор тендеров)</option>
+                            <option value="admin">Администратор</option>
+                        </select>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="agree-terms" required>
+                        <label class="form-check-label" for="agree-terms">
+                            Я согласен с <a href="/terms">пользовательским соглашением</a>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Зарегистрироваться</button>
+                </form>
+                
+                <div class="mt-3 text-center">
+                    <p>Уже есть аккаунт? <a href="/login">Войти</a></p>
+                </div>
+                
+                <div id="register-message" class="mt-3"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('register-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+    const role = document.getElementById('role').value;
+    const messageDiv = document.getElementById('register-message');
+    
+    // Проверка паролей
+    if (password !== confirmPassword) {
+        messageDiv.innerHTML = '<div class="alert alert-danger">Пароли не совпадают</div>';
+        return;
+    }
+    
+    // Проверка сложности пароля
+    if (password.length < 6) {
+        messageDiv.innerHTML = '<div class="alert alert-danger">Пароль должен содержать минимум 6 символов</div>';
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password, role })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            messageDiv.innerHTML = '<div class="alert alert-success">Регистрация успешна! Перенаправляем...</div>';
+            
+            // Сохраняем токен и перенаправляем
+            localStorage.setItem('token', data.token);
+            
+            setTimeout(() => {
+                window.location.href = '/dashboard';
+            }, 2000);
+        } else {
+            messageDiv.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+        }
+    } catch (error) {
+        messageDiv.innerHTML = '<div class="alert alert-danger">Ошибка соединения с сервером</div>';
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block title %}Создать тендер - ООО "Системная безопасность"{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-3">
+        <!-- Боковое меню менеджера -->
+        <div class="card">
+            <div class="card-header bg-warning text-white">
+                <h6 class="mb-0">💼 Панель менеджера</h6>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="/dashboard" class="list-group-item list-group-item-action">
+                    📊 Обзор
+                </a>
+                <a href="/manager/tenders" class="list-group-item list-group-item-action">
+                    📋 Мои тендеры
+                </a>
+                <a href="/manager/applications" class="list-group-item list-group-item-action">
+                    📄 Заявки
+                </a>
+                <a href="/manager/tenders/create" class="list-group-item list-group-item-action active">
+                    ➕ Создать тендер
+                </a>
+            </div>
+        </div>
+
+        <!-- Подсказки -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6 class="mb-0">💡 Подсказки</h6>
+            </div>
+            <div class="card-body">
+                <small class="text-muted">
+                    • Заполняйте все обязательные поля<br>
+                    • Указывайте реалистичные сроки<br>
+                    • Подробно описывайте требования<br>
+                    • Устанавливайте адекватный бюджет
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>➕ Создать новый тендер</h2>
+            <span class="badge bg-warning">Менеджер</span>
+        </div>
+
+        <!-- Форма создания тендера -->
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">📋 Форма создания тендера</h5>
+            </div>
+            <div class="card-body">
+                <form id="create-tender-form">
+                    <!-- Основная информация -->
+                    <div class="mb-4">
+                        <h5>📄 Основная информация</h5>
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label class="form-label">🏷️ Название тендера *</label>
+                                <input type="text" class="form-control" placeholder="Введите название тендера" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">🎭 Тип тендера *</label>
+                                <select class="form-select" required>
+                                    <option value="">Выберите тип</option>
+                                    <option value="open">Открытый</option>
+                                    <option value="closed">Закрытый</option>
+                                    <option value="limited">Ограниченный</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">📝 Описание тендера *</label>
+                            <textarea class="form-control" rows="4" placeholder="Подробно опишите цели, задачи и требования тендера..." required></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Бюджет и сроки -->
+                    <div class="mb-4">
+                        <h5>💰 Бюджет и сроки</h5>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">💰 Бюджет (₽)</label>
+                                <input type="number" class="form-control" placeholder="0.00" step="0.01">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">💱 Валюта</label>
+                                <select class="form-select">
+                                    <option selected>RUB - Российский рубль</option>
+                                    <option>USD - Доллар США</option>
+                                    <option>EUR - Евро</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">📅 Срок подачи заявок *</label>
+                                <input type="date" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Дополнительная информация -->
+                    <div class="mb-4">
+                        <h5>📎 Дополнительная информация</h5>
+                        <div class="mb-3">
+                            <label class="form-label">🏢 Заказчик *</label>
+                            <input type="text" class="form-control" value='ООО "Системная безопасность"' required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">📋 Категория</label>
+                            <select class="form-select">
+                                <option value="">Выберите категорию</option>
+                                <option>Информационная безопасность</option>
+                                <option>ИТ-инфраструктура</option>
+                                <option>Разработка ПО</option>
+                                <option>Консалтинг</option>
+                                <option>Обучение</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">📎 Прикрепленные документы</label>
+                            <input type="file" class="form-control" multiple>
+                            <div class="form-text">Можно прикрепить несколько файлов (PDF, DOC, DOCX)</div>
+                        </div>
+                    </div>
+
+                    <!-- Контактная информация -->
+                    <div class="mb-4">
+                        <h5>📞 Контактная информация</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">👤 Контактное лицо *</label>
+                                <input type="text" class="form-control" value="{{ check_auth().user_name or 'Менеджер' }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">📧 Email для вопросов *</label>
+                                <input type="email" class="form-control" value="{{ check_auth().user_email }}" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">📞 Телефон для связи</label>
+                            <input type="tel" class="form-control" placeholder="+7 (XXX) XXX-XX-XX">
+                        </div>
+                    </div>
+
+                    <!-- Кнопки действий -->
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success">
+                            🚀 Опубликовать тендер
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="saveDraft()">
+                            💾 Сохранить черновик
+                        </button>
+                        <button type="button" class="btn btn-outline-danger" onclick="cancelCreation()">
+                            ❌ Отмена
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('create-tender-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (confirm('🚀 Опубликовать тендер?')) {
+        alert('✅ Тендер успешно опубликован!');
+        window.location.href = '/manager/tenders';
+    }
+});
+
+function saveDraft() {
+    if (confirm('💾 Сохранить тендер как черновик?')) {
+        alert('✅ Тендер сохранен как черновик!');
+        window.location.href = '/manager/tenders';
+    }
+}
+
+function cancelCreation() {
+    if (confirm('❌ Отменить создание тендера?')) {
+        window.location.href = '/manager/tenders';
+    }
+}
+</script>
+
+<style>
+.form-label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+</style>
+{% endblock %}

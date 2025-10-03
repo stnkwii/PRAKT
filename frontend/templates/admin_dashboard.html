@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Панель администратора - Система тендерных закупок{% endblock %}
+
+{% block content %}
+<!-- В начале контента добавляем -->
+<div class="alert alert-danger mb-4">
+    <h4>👑 Добро пожаловать, {{ session.get('user_name', 'Администратор') }}!</h4>
+    <p class="mb-0">Вы вошли как <strong>Администратор</strong>. У вас есть полный доступ ко всем функциям системы.</p>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <div class="list-group">
+            <a href="/admin/dashboard" class="list-group-item list-group-item-action active">Обзор</a>
+            <a href="/admin/users" class="list-group-item list-group-item-action">Пользователи</a>
+            <a href="/admin/tenders" class="list-group-item list-group-item-action">Тендеры</a>
+            <a href="/admin/applications" class="list-group-item list-group-item-action">Заявки</a>
+            <a href="/admin/reports" class="list-group-item list-group-item-action">Отчеты</a>
+            <a href="/admin/settings" class="list-group-item list-group-item-action">Настройки</a>
+        </div>
+    </div>
+    
+    <div class="col-md-9">
+        <h2>Панель администратора</h2>
+        
+<!-- Статистика -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>156</h4>
+                        <p>Пользователей</p>
+                    </div>
+                    <div class="h1">👥</div>
+                </div>
+                <a href="/admin/users" class="btn btn-light btn-sm mt-2 w-100">Управление</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>24</h4>
+                        <p>Активных тендеров</p>
+                    </div>
+                    <div class="h1">📋</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>89</h4>
+                        <p>Всего заявок</p>
+                    </div>
+                    <div class="h1">📄</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>12</h4>
+                        <p>Новых сегодня</p>
+                    </div>
+                    <div class="h1">🆕</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    loadAdminStats();
+    loadRecentTenders();
+});
+
+async function loadAdminStats() {
+    // Заглушка для статистики
+    document.getElementById('total-users').textContent = '156';
+    document.getElementById('active-tenders').textContent = '12';
+    document.getElementById('total-applications').textContent = '89';
+    document.getElementById('pending-applications').textContent = '23';
+}
+
+async function loadRecentTenders() {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('/api/tenders/tenders?page=1&per_page=5', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (data.tenders && data.tenders.length > 0) {
+            let html = '<div class="list-group">';
+            data.tenders.forEach(tender => {
+                html += `
+                    <a href="/admin/tenders/${tender.id}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">${tender.title}</h6>
+                            <small>${new Date(tender.created_at).toLocaleDateString()}</small>
+                        </div>
+                        <p class="mb-1">${tender.customer}</p>
+                        <small>Заявок: ${tender.applications_count || 0}</small>
+                    </a>
+                `;
+            });
+            html += '</div>';
+            document.getElementById('recent-tenders').innerHTML = html;
+        }
+    } catch (error) {
+        console.error('Ошибка загрузки тендеров:', error);
+    }
+}
+</script>
+{% endblock %}

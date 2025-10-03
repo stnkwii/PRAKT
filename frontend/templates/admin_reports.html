@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+
+{% block title %}Отчеты и аналитика - ООО "Системная безопасность"{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-3">
+        <!-- Боковое меню администратора -->
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h6 class="mb-0">👑 Панель администратора</h6>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="/dashboard" class="list-group-item list-group-item-action">
+                    📊 Обзор системы
+                </a>
+                <a href="/admin/users" class="list-group-item list-group-item-action">
+                    👥 Управление пользователями
+                </a>
+                <a href="/admin/tenders" class="list-group-item list-group-item-action">
+                    📋 Управление тендерами
+                </a>
+                <a href="/admin/settings" class="list-group-item list-group-item-action">
+                    ⚙️ Системные настройки
+                </a>
+                <a href="/admin/reports" class="list-group-item list-group-item-action active">
+                    📈 Отчеты и аналитика
+                </a>
+            </div>
+        </div>
+
+        <!-- Быстрые действия -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6 class="mb-0">⚡ Быстрые отчеты</h6>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-outline-primary btn-sm w-100 mb-2" onclick="generateDailyReport()">
+                    📅 Ежедневный отчет
+                </button>
+                <button class="btn btn-outline-success btn-sm w-100 mb-2" onclick="generateMonthlyReport()">
+                    📊 Месячный отчет
+                </button>
+                <button class="btn btn-outline-info btn-sm w-100" onclick="generateFinancialReport()">
+                    💰 Финансовый отчет
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>📈 Отчеты и аналитика</h2>
+            <span class="badge bg-danger">Администратор</span>
+        </div>
+
+        <!-- Период отчетности -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">📅 Выбор периода</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="form-label">Дата начала</label>
+                        <input type="date" class="form-control" value="2024-12-01">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Дата окончания</label>
+                        <input type="date" class="form-control" value="2024-12-19">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Тип отчета</label>
+                        <select class="form-select">
+                            <option selected>Общая статистика</option>
+                            <option>Финансовая аналитика</option>
+                            <option>Активность пользователей</option>
+                            <option>Эффективность тендеров</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">&nbsp;</label>
+                        <button class="btn btn-primary w-100" onclick="generateReport()">
+                            📊 Сгенерировать отчет
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ключевые метрики -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body text-center py-3">
+                        <h4>24</h4>
+                        <small>Тендеров создано</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body text-center py-3">
+                        <h4>89</h4>
+                        <small>Заявок подано</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-warning text-white">
+                    <div class="card-body text-center py-3">
+                        <h4>156</h4>
+                        <small>Пользователей</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-info text-white">
+                    <div class="card-body text-center py-3">
+                        <h4>15.2M ₽</h4>
+                        <small>Общий бюджет</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Графики и диаграммы -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0">📈 Активность по дням</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center py-4 bg-light rounded">
+                            <div class="h1 text-muted">📊</div>
+                            <p class="text-muted">График активности будет отображен здесь</p>
+                            <small class="text-muted">(Интеграция с библиотекой графиков)</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0">🥧 Распределение по ролям</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center py-4 bg-light rounded">
+                            <div class="h1 text-muted">📋</div>
+                            <p class="text-muted">Круговая диаграмма будет отображена здесь</p>
+                            <small class="text-muted">(Интеграция с библиотекой графиков)</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Детальная статистика -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">📋 Детальная статистика</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Показатель</th>
+                                <th>Значение</th>
+                                <th>Изменение</th>
+                                <th>Тренд</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>📊 Новые пользователи</td>
+                                <td><strong>12</strong></td>
+                                <td>+2 (↗️ +20%)</td>
+                                <td><span class="text-success">📈 Растет</span></td>
+                            </tr>
+                            <tr>
+                                <td>📋 Созданные тендеры</td>
+                                <td><strong>8</strong></td>
+                                <td>-1 (↘️ -11%)</td>
+                                <td><span class="text-warning">📉 Снижается</span></td>
+                            </tr>
+                            <tr>
+                                <td>📄 Поданые заявки</td>
+                                <td><strong>24</strong></td>
+                                <td>+5 (↗️ +26%)</td>
+                                <td><span class="text-success">📈 Растет</span></td>
+                            </tr>
+                            <tr>
+                                <td>💰 Средний бюджет</td>
+                                <td><strong>633,333 ₽</strong></td>
+                                <td>+45,000 ₽ (↗️ +7.6%)</td>
+                                <td><span class="text-success">📈 Растет</span></td>
+                            </tr>
+                            <tr>
+                                <td>⏱️ Среднее время тендера</td>
+                                <td><strong>18 дней</strong></td>
+                                <td>-2 дня (↘️ -10%)</td>
+                                <td><span class="text-success">📈 Улучшение</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Экспорт отчетов -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0">💾 Экспорт данных</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <button class="btn btn-outline-primary w-100 mb-2" onclick="exportToExcel()">
+                            📊 Excel отчет
+                        </button>
+                        <small class="text-muted">Данные в формате XLSX</small>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <button class="btn btn-outline-success w-100 mb-2" onclick="exportToPDF()">
+                            📄 PDF отчет
+                        </button>
+                        <small class="text-muted">Готовый отчет в PDF</small>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <button class="btn btn-outline-info w-100 mb-2" onclick="exportToCSV()">
+                            📋 CSV данные
+                        </button>
+                        <small class="text-muted">Сырые данные в CSV</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function generateReport() {
+    alert('📊 Отчет успешно сгенерирован за выбранный период!');
+}
+
+function generateDailyReport() {
+    alert('📅 Ежедневный отчет будет сгенерирован и отправлен на email!');
+}
+
+function generateMonthlyReport() {
+    alert('📊 Месячный отчет будет сгенерирован и отправлен на email!');
+}
+
+function generateFinancialReport() {
+    alert('💰 Финансовый отчет будет сгенерирован и отправлен на email!');
+}
+
+function exportToExcel() {
+    alert('📊 Функция экспорта в Excel будет реализована в будущем!');
+}
+
+function exportToPDF() {
+    alert('📄 Функция экспорта в PDF будет реализована в будущем!');
+}
+
+function exportToCSV() {
+    alert('📋 Функция экспорта в CSV будет реализована в будущем!');
+}
+</script>
+{% endblock %}

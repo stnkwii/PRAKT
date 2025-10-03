@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Новости - Система тендерных закупок{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <h1>Новости и обновления</h1>
+        <p class="lead">Следите за последними новостями и обновлениями нашей платформы</p>
+        
+        <!-- Новость 1 -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h4 class="card-title">Запуск новой версии платформы 2.0</h4>
+                    <span class="badge bg-primary">Новое</span>
+                </div>
+                <p class="text-muted"><small>Опубликовано: 01 октября 2025</small></p>
+                <p class="card-text">Мы рады сообщить о запуске новой версии нашей платформы! Основные улучшения:</p>
+                <ul>
+                    <li>Обновленный пользовательский интерфейс</li>
+                    <li>Ускоренная работа системы</li>
+                    <li>Новые функции аналитики</li>
+                    <li>Улучшенная мобильная версия</li>
+                </ul>
+                <p>Все существующие данные сохранены, переход на новую версию произойдет автоматически.</p>
+            </div>
+        </div>
+        
+        <!-- Новость 2 -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h4 class="card-title">Веб-семинар по работе с системой</h4>
+                <p class="text-muted"><small>Опубликовано: 30 сентября 2025</small></p>
+                <p class="card-text">Приглашаем всех пользователей на бесплатный веб-семинар "Эффективная работа с системой тендерных закупок".</p>
+                <p><strong>Дата:</strong> 30 сентября 2025, 15:00</p>
+                <p><strong>Темы:</strong></p>
+                <ul>
+                    <li>Создание и управление тендерами</li>
+                    <li>Эффективный поиск закупок</li>
+                    <li>Подготовка конкурентных заявок</li>
+                    <li>Новые функции платформы</li>
+                </ul>
+                <a href="#" class="btn btn-outline-primary">Зарегистрироваться</a>
+            </div>
+        </div>
+        
+        <!-- Новость 3 -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h4 class="card-title">Обновление мобильного приложения</h4>
+                <p class="text-muted"><small>Опубликовано: 30 сентября 2025</small></p>
+                <p class="card-text">Вышло обновление мобильного приложения для iOS и Android с новыми функциями:</p>
+                <ul>
+                    <li>Push-уведомления о новых тендерах</li>
+                    <li>Возможность подачи заявок с мобильного устройства</li>
+                    <li>Офлайн-доступ к документации</li>
+                    <li>Улучшенная навигация</li>
+                </ul>
+                <p>Скачайте обновление в App Store или Google Play.</p>
+                <div class="btn-group">
+                    <button class="btn btn-outline-success">App Store</button>
+                    <button class="btn btn-outline-success">Google Play</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Архив новостей</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">Новые функции аналитики</h6>
+                            <small>30 сентября 2025</small>
+                        </div>
+                        <p class="mb-1">Добавлены расширенные отчеты</p>
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">Партнерство с банками</h6>
+                            <small>30 сентября 2025</small>
+                        </div>
+                        <p class="mb-1">Новые возможности финансирования</p>
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">Обновление API</h6>
+                            <small>30 сентября 2025</small>
+                        </div>
+                        <p class="mb-1">Улучшена интеграция с 1С</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5>Подписка на новости</h5>
+                <p>Получайте самые важные новости первыми!</p>
+                <form>
+                    <div class="mb-3">
+                        <input type="email" class="form-control" placeholder="Ваш email">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Подписаться</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
